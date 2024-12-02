@@ -1,96 +1,61 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单选按钮示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        label {
+            font-size: 18px;
+            margin-right: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #2c3e50;
+        }
+        input[type="radio"] {
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
-    <input id="shower"><br/>
-    <button id="num7">7</button>
-    <button id="num8">8</button>
-    <button id="num9">9</button>
-    <button id="divide" onclick="divide()">/</button><br/>
-    <button id="num4">4</button>
-    <button id="num5">5</button>
-    <button id="num6">6</button>
-    <button id="divide" onclick="multiple()">x</button><br/>
-    <button id="num1">1</button>
-    <button id="num2">2</button>
-    <button id="num3">3</button>
-    <button id="divide" onclick="minus()">-</button><br/>
-    <button id="num0">0</button>
-    <button id="cal" onclick="cal()" style="width:45px">=</button>
-    <button id="add" onclick="add()">+</button></br>
+
+    <h1>请选择一个选项</h1>
+    
+    <div class="container">
+        <label>
+            <input type="radio" name="choice" value="选项 A" onclick="showResult()"> 选项 A
+        </label>
+        <label>
+            <input type="radio" name="choice" value="选项 B" onclick="showResult()"> 选项 B
+        </label>
+        <label>
+            <input type="radio" name="choice" value="选项 C" onclick="showResult()"> 选项 C
+        </label>
+    </div>
+
+    <div class="result" id="result">
+        <!-- 选择结果会显示在这里 -->
+    </div>
+
+    <script>
+        function showResult() {
+            // 获取选中的单选按钮的值
+            var selectedOption = document.querySelector('input[name="choice"]:checked').value;
+            // 显示选择的结果
+            document.getElementById('result').innerText = "你选择的是: " + selectedOption;
+        }
+    </script>
+
 </body>
-<script>
-    operand1 = 0;
-    operand2 = 0;
-    operator = "";
-    var num0 = document.getElementById("num0");
-    var num1 = document.getElementById("num1");
-    var num2 = document.getElementById("num2");
-    var num3 = document.getElementById("num3");
-    var num4 = document.getElementById("num4");
-    var num5 = document.getElementById("num5");
-    var num6 = document.getElementById("num6");
-    var num7 = document.getElementById("num7");
-    var num8 = document.getElementById("num8");
-    var num9 = document.getElementById("num9");
-    num0.addEventListener("click", click_num);
-    num1.addEventListener("click", click_num);
-    num2.addEventListener("click", click_num);
-    num3.addEventListener("click", click_num);
-    num4.addEventListener("click", click_num);
-    num5.addEventListener("click", click_num);
-    num6.addEventListener("click", click_num);
-    num7.addEventListener("click", click_num);
-    num8.addEventListener("click", click_num);
-    num9.addEventListener("click", click_num);
-    function click_num(event){
-        shower = document.getElementById("shower");
-        num = event.target.id;
-        num = num.replace("num","");
-        shower.value = shower.value + num;
-    }
-    function add(){
-        shower = document.getElementById("shower");
-        operand1 = shower.value;
-        shower.value = "";
-        operator = "+";
-    }
-    function minus(){
-        shower = document.getElementById("shower");
-        operand1 = shower.value;
-        shower.value = "";
-        operator = "-";
-    }
-    function multiple(){
-        shower = document.getElementById("shower");
-        operand1 = shower.value;
-        shower.value = "";
-        operator = "*";
-    }
-    function divide(){
-        shower = document.getElementById("shower");
-        operand1 = shower.value;
-        shower.value = "";
-        operator = "/";
-    }
-    function cal(){
-        shower = document.getElementById("shower");
-        operand2 = shower.value;
-        if (operator == "+"){
-            shower.value = parseInt(operand1) + parseInt(operand2);
-        }
-        else if (operator == "-"){
-            shower.value = parseInt(operand1) - parseInt(operand2);
-        }
-        else if (operator == "*"){
-            shower.value = parseInt(operand1) * parseInt(operand2);
-        }
-        else if (operator == "/"){
-            shower.value = parseInt(operand1) / parseInt(operand2);
-        }
-    }
-</script>
 </html>
