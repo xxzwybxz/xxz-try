@@ -1,70 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang=en>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博君一肖主题网站</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        header {
-            background-color: #6c5ce7;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        main {
-            padding: 20px;
-        }
-        .video-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        iframe {
-            width: 80%;
-            max-width: 800px;
-            height: 450px;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <title>Document</title>
 </head>
 <body>
-    <header>
-        <h1>博君一肖主题网站</h1>
-        <p>分享关于博君一肖的精彩视频与内容</p>
-    </header>
-    <main>
-        <section class="video-container">
-            <h2>精彩视频</h2>
-            <!-- 嵌入哔哩哔哩视频 -->
-            <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=532156411&bvid=BV18u411E7wZ&cid=1230842992&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
-        </section>
-        <section>
-            <iframe src=https://space.bilibili.com/39013441/favlist?fid=486006641&ftype=create></iframe>
-        </section>
-        <section>
-            <h2>简介</h2>
-            <p>博君一肖是“博肖”粉丝们的简称，他们支持的是两位优秀的演员和歌手。通过这个网站，我们希望能够分享更多有趣的内容，带给大家更多快乐！</p>
-        </section>
-    </main>
-    <footer>
-        &copy; 2024 博君一肖粉丝网站 | 设计：徐熙喆
-    </footer>
+    <input id="shower"><br/>
+    <button id="num7">7</button>
+    <button id="num8">8</button>
+    <button id="num9">9</button>
+    <button id="divide" onclick="divide()">/</button><br/>
+    <button id="num4">4</button>
+    <button id="num5">5</button>
+    <button id="num6">6</button>
+    <button id="divide" onclick="multiple()">x</button><br/>
+    <button id="num1">1</button>
+    <button id="num2">2</button>
+    <button id="num3">3</button>
+    <button id="divide" onclick="minus()">-</button><br/>
+    <button id="num0">0</button>
+    <button id="cal" onclick="cal()" style="width:45px">=</button>
+    <button id="add" onclick="add()">+</button></br>
 </body>
+<script>
+    operand1 = 0;
+    operand2 = 0;
+    operator = "";
+    var num0 = document.getElementById("num0");
+    var num1 = document.getElementById("num1");
+    var num2 = document.getElementById("num2");
+    var num3 = document.getElementById("num3");
+    var num4 = document.getElementById("num4");
+    var num5 = document.getElementById("num5");
+    var num6 = document.getElementById("num6");
+    var num7 = document.getElementById("num7");
+    var num8 = document.getElementById("num8");
+    var num9 = document.getElementById("num9");
+    num0.addEventListener("click", click_num);
+    num1.addEventListener("click", click_num);
+    num2.addEventListener("click", click_num);
+    num3.addEventListener("click", click_num);
+    num4.addEventListener("click", click_num);
+    num5.addEventListener("click", click_num);
+    num6.addEventListener("click", click_num);
+    num7.addEventListener("click", click_num);
+    num8.addEventListener("click", click_num);
+    num9.addEventListener("click", click_num);
+    function click_num(event){
+        shower = document.getElementById("shower");
+        num = event.target.id;
+        num = num.replace("num","");
+        shower.value = shower.value + num;
+    }
+    function add(){
+        shower = document.getElementById("shower");
+        operand1 = shower.value;
+        shower.value = "";
+        operator = "+";
+    }
+    function minus(){
+        shower = document.getElementById("shower");
+        operand1 = shower.value;
+        shower.value = "";
+        operator = "-";
+    }
+    function multiple(){
+        shower = document.getElementById("shower");
+        operand1 = shower.value;
+        shower.value = "";
+        operator = "*";
+    }
+    function divide(){
+        shower = document.getElementById("shower");
+        operand1 = shower.value;
+        shower.value = "";
+        operator = "/";
+    }
+    function cal(){
+        shower = document.getElementById("shower");
+        operand2 = shower.value;
+        if (operator == "+"){
+            shower.value = parseInt(operand1) + parseInt(operand2);
+        }
+        else if (operator == "-"){
+            shower.value = parseInt(operand1) - parseInt(operand2);
+        }
+        else if (operator == "*"){
+            shower.value = parseInt(operand1) * parseInt(operand2);
+        }
+        else if (operator == "/"){
+            shower.value = parseInt(operand1) / parseInt(operand2);
+        }
+    }
+</script>
 </html>
