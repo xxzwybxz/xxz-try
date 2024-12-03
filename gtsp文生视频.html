@@ -38,6 +38,14 @@
             margin-top: 20px;
             text-align: center;
         }
+
+        /* 居中对齐有序列表 */
+        ol {
+            display: inline-block; /* 让有序列表变为行内块元素 */
+            text-align: left; /* 保持列表项的对齐方式 */
+            padding-left: 20px; /* 保证列表有足够的左侧间距 */
+            margin-top: 20px; /* 增加顶部间距 */
+        }
     </style>
 </head>
 <body>
@@ -58,9 +66,11 @@
     </ol>
 
     <h2>观看文生视频</h2>
-    <video width="600" height="auto" controls>
-        <source src="龟兔.mp4" type="video/mp4">
-    </video>
+    <div class="video-container">
+        <video width="600" height="auto" controls>
+            <source src="龟兔.mp4" type="video/mp4">
+        </video>
+    </div>
 
     <p class="note">点击播放按钮，观看“龟兔赛跑”文生视频，体验从不同视角呈现的故事情节。</p>
 
