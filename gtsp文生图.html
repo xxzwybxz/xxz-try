@@ -33,15 +33,21 @@
             color: #333;
         }
 
-        ol {
-            list-style-type: decimal;
-            padding-left: 40px;
-            text-align: left;
-            margin-top: 20px;
+        /* 样式调整 */
+        ul, ol {
+            list-style-position: inside; /* 将项目符号或编号显示在内容区域内 */
+            margin: 0 auto;
+            padding-left: 0;
+            text-align: left;  /* 设置文本左对齐 */
+            display: inline-block; /* 让列表块元素水平居中 */
         }
 
-        ol li {
+        ul li, ol li {
             margin-bottom: 15px;
+        }
+
+        ol {
+            padding-left: 20px; /* 给有序列表加点内边距 */
         }
     </style>
 </head>
