@@ -17,7 +17,6 @@
 
         /* 容器样式 */
         .container {
-            height: 300vh; /* 每页高度为 100vh，总高度为 3 页 */
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -33,7 +32,6 @@
             align-items: center;
             flex-direction: column;
             position: relative;
-            opacity: 1;
         }
 
         /* 各页面背景颜色 */
@@ -78,7 +76,6 @@
             color: #333;
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            opacity: 0;
         }
 
         /* 正文样式 */
@@ -88,7 +85,6 @@
             margin-bottom: 20px;
             line-height: 1.6;
             padding: 0 10px;
-            opacity: 0;
         }
 
         /* 图片样式 */
@@ -98,7 +94,6 @@
             height: auto; /* 保持图片比例 */
             border-radius: 10px; /* 添加圆角 */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
-            opacity: 0;
         }
     </style>
 </head>
@@ -109,7 +104,7 @@
             <div class="content">
                 <div class="text">这是我的妈妈</div>
                 <div class="description">她是一个温柔而坚强的女人，总是用爱和关怀支持着我们的家庭。</div>
-                <img src="1.jpg" alt="妈妈" class="page-image">
+                <img src="1.jpg" alt="妈妈" class="page-image" onerror="this.src='placeholder.jpg';">
             </div>
         </div>
         <!-- 绿色页面 -->
@@ -117,7 +112,7 @@
             <div class="content">
                 <div class="text">这是我的爸爸</div>
                 <div class="description">他是家庭的顶梁柱，用智慧和幽默为我们带来欢乐和安全感。</div>
-                <img src="2.jpg" alt="爸爸" class="page-image">
+                <img src="2.jpg" alt="爸爸" class="page-image" onerror="this.src='placeholder.jpg';">
             </div>
         </div>
         <!-- 黄色页面 -->
@@ -125,7 +120,7 @@
             <div class="content">
                 <div class="text">我们是幸福的一家</div>
                 <div class="description">无论遇到什么困难，我们都彼此扶持，共同面对，让爱充满每一天。</div>
-                <img src="ccc.jpg" alt="幸福的一家" class="page-image">
+                <img src="ccc.jpg" alt="幸福的一家" class="page-image" onerror="this.src='placeholder.jpg';">
             </div>
         </div>
     </div>
@@ -134,10 +129,12 @@
         var container = document.querySelector(".container");
         var pages = document.querySelectorAll(".page");
         var currentPage = 0;
-
         var isTurning = false; // 防止频繁触发翻页
 
-        // 监听触摸开始、滑动和结束事件
+        // 动态设置容器高度
+        document.querySelector(".container").style.height = pages.length * 100 + "vh";
+
+        // 初始化触摸事件
         window.onload = function () {
             var body = document.getElementsByTagName("body")[0];
             body.addEventListener("touchstart", turnBegin, false);
@@ -153,25 +150,21 @@
         function turnBegin(event) {
             var touch = event.touches[0];
             startY = touch.pageY;
+            endY = startY; // 确保初始值一致
         }
 
         function turning(event) {
-            event.preventDefault(); // 防止默认的滚动行为
-            var touch = event.touches[0];
-            endY = touch.pageY;
+            if (Math.abs(startY - event.touches[0].pageY) > 10) {
+                event.preventDefault(); // 仅在检测到滑动时阻止默认行为
+            }
         }
 
         function turnEnd(event) {
-            if (!isTurning) {
-                if (startY - endY > 50) { // 上滑
-                    nextPage();
-                } else if (endY - startY > 50) { // 下滑
-                    previousPage();
-                }
+            if (!isTurning && Math.abs(startY - endY) > 50) {
                 isTurning = true;
-                setTimeout(function () {
-                    isTurning = false;
-                }, 600); // 防止频繁触发翻页
+                if (startY - endY > 50) nextPage();
+                else if (endY - startY > 50) previousPage();
+                setTimeout(() => (isTurning = false), 600); // 防止频繁触发
             }
         }
 
@@ -204,7 +197,6 @@
             pages.forEach((page, index) => {
                 const content = page.querySelector(".content");
                 content.classList.remove("active");
-                content.style.opacity = "0";
             });
 
             // 显示当前页面内容
