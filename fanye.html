@@ -27,12 +27,13 @@
 
         /* 设置每个页面的大小，确保它们是全屏的 */
         .page {
-            height: 200vh;
+            height: 100vh;
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            flex-direction: column;
         }
 
         /* 红色页面 */
@@ -40,20 +41,26 @@
             background-color: red;
         }
 
-          /* 绿色页面 */
-        .green {
-            background-color: green;
-        }
-
         /* 黄色页面 */
         .yellow {
             background-color: yellow;
         }
 
-        /* 页面内容，包括图片和文字 */
+        /* 绿色页面 */
+        .green {
+            background-color: green;
+        }
+
+        /* 页面内容，包括文字和图片 */
         .content {
             position: relative;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
         }
 
         /* 设置图片为全屏，确保覆盖整个页面 */
@@ -61,6 +68,8 @@
             width: 100%;
             height: auto;
             object-fit: cover; /* 保持图片比例并填充整个容器 */
+            position: absolute;
+            bottom: 0;
         }
 
         /* 添加文字的样式 */
@@ -78,22 +87,25 @@
 </head>
 <body>
     <div class="container">
+        <!-- 红色页面 -->
         <div class="page red">
             <div class="content">
-                <img src="aaa.jpg" alt="Red Page" class="page-image">
                 <div class="text">这是红色页面</div>
+                <img src="images/red-image.jpg" alt="Red Page" class="page-image">
             </div>
         </div>
-        <div class="page green">
-            <div class="content">
-                <img src="bbb.jpg" alt="Yellow Page" class="page-image">
-                <div class="text">这是绿色页面</div>
-            </div>
-        </div>
+        <!-- 黄色页面 -->
         <div class="page yellow">
             <div class="content">
-                <img src="ccc.jpg" alt="Green Page" class="page-image">
                 <div class="text">这是黄色页面</div>
+                <img src="images/yellow-image.jpg" alt="Yellow Page" class="page-image">
+            </div>
+        </div>
+        <!-- 绿色页面 -->
+        <div class="page green">
+            <div class="content">
+                <div class="text">这是绿色页面</div>
+                <img src="images/green-image.jpg" alt="Green Page" class="page-image">
             </div>
         </div>
     </div>
