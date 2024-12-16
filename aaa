@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分页示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .content {
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination .active {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 内容区域 -->
+        <div id="page1" class="content">
+            <h2>第1页内容</h2>
+            <p>这是第1页的内容。</p>
+        </div>
+        <div id="page2" class="content" style="display:none;">
+            <h2>第2页内容</h2>
+            <p>这是第2页的内容。</p>
+        </div>
+        <div id="page3" class="content" style="display:none;">
+            <h2>第3页内容</h2>
+            <p>这是第3页的内容。</p>
+        </div>
+
+        <!-- 分页导航 -->
+        <div class="pagination">
+            <a href="javascript:void(0);" onclick="showPage(1)" class="active">1</a>
+            <a href="javascript:void(0);" onclick="showPage(2)">2</a>
+            <a href="javascript:void(0);" onclick="showPage(3)">3</a>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageNumber) {
+            // 隐藏所有页面内容
+            const pages = document.querySelectorAll('.content');
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+
+            // 显示当前页面
+            document.getElementById('page' + pageNumber).style.display = 'block';
+
+            // 更新分页按钮样式
+            const paginationLinks = document.querySelectorAll('.pagination a');
+            paginationLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            paginationLinks[pageNumber - 1].classList.add('active');
+        }
+
+        // 默认显示第1页
+        showPage(1);
+    </script>
+</body>
+</html>
