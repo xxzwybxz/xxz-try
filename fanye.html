@@ -1,36 +1,62 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博君一肖 - 滑动翻页</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="page" id="page1">
-            <div class="content">
-                <h1>博君一肖</h1>
-                <p>欢迎来到博君一肖的主题页面！</p>
-                <img src="aaa.jpg" alt="博君一肖图片1">
-            </div>
-        </div>
-        <div class="page" id="page2">
-            <div class="content">
-                <h1>关于博君一肖</h1>
-                <p>博君一肖是一对b人</p>
-                <img src="bbb.jpg" alt="博君一肖图片2">
-            </div>
-        </div>
-        <div class="page" id="page3">
-            <div class="content">
-                <h1>粉丝互动</h1>
-                <p>博君一肖的粉丝非常活跃，经常参与各种线上活动和线下见面会，粉丝文化非常强大。</p>
-                <img src="ccc.jpg" alt="博君一肖图片3">
-            </div>
-        </div>
-    </div>
+var pages = document.getElementsByClassName("page");
+var curPage = 0;
+var isTurning = false;
 
-    <script src="script.js"></script>
-</body>
-</html>
+window.onload = function() {
+    var body = document.getElementsByTagName("body")[0];
+    body.addEventListener("touchstart", turnBegin, false);
+    body.addEventListener("touchmove", turning, false);
+    body.addEventListener("touchend", turnEnd, false);
+}
+
+var x, y;
+var x2, y2;
+
+function turnBegin(event) {
+    var touch = event.touches[0];
+    x = touch.pageX;
+    y = touch.pageY;
+}
+
+function turning(event) {
+    event.preventDefault();  // 阻止默认滚动行为
+    var touch = event.touches[0];
+    x2 = touch.pageX;
+    y2 = touch.pageY;
+}
+
+function turnEnd(event) {
+    if (!isTurning) {
+        if (y2 - y > 100) {
+            turnUp();
+        } else if (y - y2 > 100) {
+            turnPage();
+        }
+        isTurning = true;
+        setTimeout(function() {
+            isTurning = false;
+        }, 600);  // 设置延时，防止多次触发
+    }
+}
+
+function turnPage() {
+    pages[curPage].className = "page pt-page-moveToTop"; // 把当前页隐藏
+    if (curPage < pages.length - 1) { // 如果不是最后一页
+        pages[curPage + 1].className = "page pt-page-moveFromBottom";
+        curPage++;
+    } else { // 如果是最后一页，则跳回首页
+        pages[0].className = "page pt-page-moveFromBottom";
+        curPage = 0;
+    }
+}
+
+function turnUp() {
+    pages[curPage].className = "page pt-page-moveToBottom"; // 当前页向下移动
+    if (curPage > 0) { // 如果当前不是第一页
+        pages[curPage - 1].className = "page pt-page-moveFromTop";
+        curPage--;
+    } else { // 如果是第一页，则跳到最后一页
+        pages[pages.length - 1].className = "page pt-page-moveFromTop";
+        curPage = pages.length - 1;
+    }
+}
