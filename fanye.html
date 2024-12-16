@@ -52,26 +52,42 @@
         .content.active {
             animation: fadeIn 1s ease-in-out forwards;
         }
+
+        /* 图片样式 */
+        .page-image {
+            width: 80%; /* 图片宽度 */
+            max-width: 400px; /* 限制最大宽度 */
+            height: auto; /* 保持比例 */
+            margin-top: 20px; /* 图片与文字间距 */
+            border-radius: 10px; /* 圆角效果 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- 红色页面 -->
         <div class="page red">
             <div class="content">
                 <h1>这是我的妈妈</h1>
-                <p>她是一个温柔而坚强的女人。</p>
+                <p>她是一个温柔而坚强的女人，总是用爱和关怀支持着我们的家庭。</p>
+                <img src="1.jpg" alt="妈妈" class="page-image" onerror="this.src='placeholder.jpg';">
             </div>
         </div>
+        <!-- 绿色页面 -->
         <div class="page green">
             <div class="content">
                 <h1>这是我的爸爸</h1>
-                <p>他是家庭的顶梁柱。</p>
+                <p>他是家庭的顶梁柱，用智慧和幽默为我们带来欢乐和安全感。</p>
+                <img src="2.jpg" alt="爸爸" class="page-image" onerror="this.src='placeholder.jpg';">
             </div>
         </div>
+        <!-- 黄色页面 -->
         <div class="page yellow">
             <div class="content">
                 <h1>我们是幸福的一家</h1>
-                <p>无论遇到什么困难，我们都彼此扶持。</p>
+                <p>无论遇到什么困难，我们都彼此扶持，共同面对，让爱充满每一天。</p>
+                <img src="ccc.jpg" alt="幸福的一家" class="page-image" onerror="this.src='placeholder.jpg';">
             </div>
         </div>
     </div>
