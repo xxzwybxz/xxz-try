@@ -34,6 +34,7 @@
             align-items: center;
             position: relative;
             flex-direction: column;
+            background-color: white;
         }
 
         /* 红色页面 */
@@ -63,13 +64,12 @@
             width: 100%;
         }
 
-        /* 设置图片为全屏，确保覆盖整个页面 */
+        /* 设置图片居中且保持比例 */
         .page-image {
-            width: 100%;
-            height: auto;
-            object-fit: cover; /* 保持图片比例并填充整个容器 */
-            position: absolute;
-            bottom: 0;
+            max-width: 80%; /* 图片最大宽度为80% */
+            max-height: 80%; /* 图片最大高度为80% */
+            object-fit: contain; /* 保持图片比例并不覆盖整个容器 */
+            margin-top: 20px; /* 图片和文字之间的距离 */
         }
 
         /* 添加文字的样式 */
@@ -91,21 +91,21 @@
         <div class="page red">
             <div class="content">
                 <div class="text">这是红色页面</div>
-                <img src="images/red-image.jpg" alt="Red Page" class="page-image">
+                <img src="aaa.jpg" alt="Red Page" class="page-image">
             </div>
         </div>
         <!-- 黄色页面 -->
         <div class="page yellow">
             <div class="content">
                 <div class="text">这是黄色页面</div>
-                <img src="images/yellow-image.jpg" alt="Yellow Page" class="page-image">
+                <img src="bbb.jpg" alt="Yellow Page" class="page-image">
             </div>
         </div>
         <!-- 绿色页面 -->
         <div class="page green">
             <div class="content">
                 <div class="text">这是绿色页面</div>
-                <img src="images/green-image.jpg" alt="Green Page" class="page-image">
+                <img src="ccc.jpg" alt="Green Page" class="page-image">
             </div>
         </div>
     </div>
