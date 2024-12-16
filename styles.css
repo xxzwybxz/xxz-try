@@ -31,14 +31,27 @@ html, body {
     background-color: red;
 }
 
+/* 黄色页面 */
+.yellow {
+    background-color: yellow;
+}
+
 /* 绿色页面 */
 .green {
     background-color: green;
 }
 
-/* 黄色页面 */
-.yellow {
-    background-color: yellow;
+/* 页面内容，包括图片和文字 */
+.content {
+    position: relative;
+    text-align: center;
+}
+
+/* 设置图片为全屏，确保覆盖整个页面 */
+.page-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* 保持图片比例并填充整个容器 */
 }
 
 /* 添加文字的样式 */
