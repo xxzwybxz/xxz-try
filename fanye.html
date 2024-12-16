@@ -27,7 +27,7 @@
 
         /* 设置每个页面的大小，确保它们是全屏的 */
         .page {
-            height: 100vh;
+            height: 200vh;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -40,14 +40,14 @@
             background-color: red;
         }
 
+          /* 绿色页面 */
+        .green {
+            background-color: green;
+        }
+
         /* 黄色页面 */
         .yellow {
             background-color: yellow;
-        }
-
-        /* 绿色页面 */
-        .green {
-            background-color: green;
         }
 
         /* 页面内容，包括图片和文字 */
@@ -80,20 +80,20 @@
     <div class="container">
         <div class="page red">
             <div class="content">
-                <img src="images/red-image.jpg" alt="Red Page" class="page-image">
+                <img src="aaa.jpg" alt="Red Page" class="page-image">
                 <div class="text">这是红色页面</div>
-            </div>
-        </div>
-        <div class="page yellow">
-            <div class="content">
-                <img src="images/yellow-image.jpg" alt="Yellow Page" class="page-image">
-                <div class="text">这是黄色页面</div>
             </div>
         </div>
         <div class="page green">
             <div class="content">
-                <img src="images/green-image.jpg" alt="Green Page" class="page-image">
+                <img src="bbb.jpg" alt="Yellow Page" class="page-image">
                 <div class="text">这是绿色页面</div>
+            </div>
+        </div>
+        <div class="page yellow">
+            <div class="content">
+                <img src="ccc.jpg" alt="Green Page" class="page-image">
+                <div class="text">这是黄色页面</div>
             </div>
         </div>
     </div>
