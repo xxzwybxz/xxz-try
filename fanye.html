@@ -4,84 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>触摸滑动翻页</title>
-
-    <!-- 在这里写 CSS 样式 -->
     <style>
-        /* 设定body和html为全屏 */
+        /* 全局样式 */
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
             width: 100%;
             overflow: hidden;
+            font-family: Arial, sans-serif;
         }
 
-        /* 设置容器 */
+        /* 容器样式 */
         .container {
-            height: 400vh;
+            height: 300vh; /* 每页高度为 100vh，总高度为 3 页 */
             width: 100%;
             display: flex;
-            flex-direction: column; /* 垂直排列 */
+            flex-direction: column;
             transition: transform 0.6s ease-in-out;
         }
 
-        /* 设置每个页面的大小，确保它们是全屏的 */
+        /* 页面样式 */
         .page {
-            height: 400vh;
+            height: 100vh;
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
             flex-direction: column;
-            background-color: white;
-        }
-
-        /* 红色页面 */
-        .red {
-            background-color: red;
-        }
-
-         /* 绿色页面 */
-        .green {
-            background-color: green;
-        }
-        
-        /* 黄色页面 */
-        .yellow {
-            background-color: yellow;
-        }
-
-        /* 页面内容，包括文字和图片 */
-        .content {
             position: relative;
+        }
+
+        /* 各页面背景颜色 */
+        .red {
+            background-color: #FFCDD2; /* 柔和的粉红色 */
+        }
+
+        .green {
+            background-color: #C8E6C9; /* 柔和的绿色 */
+        }
+
+        .yellow {
+            background-color: #FFF9C4; /* 柔和的黄色 */
+        }
+
+        /* 内容样式 */
+        .content {
             text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100%;
-            width: 100%;
+            justify-content: center;
+            width: 80%; /* 内容宽度 */
+            max-width: 800px; /* 最大宽度 */
         }
 
-        /* 设置图片居中且保持比例 */
-        .page-image {
-            max-width: 80%; /* 图片最大宽度为80% */
-            max-height: 80%; /* 图片最大高度为80% */
-            object-fit: contain; /* 保持图片比例并不覆盖整个容器 */
-            margin-top: 20px; /* 图片和文字之间的距离 */
-        }
-
-        /* 添加文字的样式 */
+        /* 文字样式 */
         .text {
-            position: absolute;
-            top: 20px; /* 文字离页面顶部一定距离 */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 图片样式 */
+        .page-image {
+            width: 100%; /* 图片宽度为内容宽度 */
+            max-width: 400px; /* 限制最大宽度 */
+            height: auto; /* 保持图片比例 */
+            border-radius: 10px; /* 添加圆角 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
         }
     </style>
 </head>
@@ -91,26 +84,90 @@
         <div class="page red">
             <div class="content">
                 <div class="text">这是我的妈妈</div>
-                <img src="1.jpg" alt="Red Page" class="page-image">
+                <img src="1.jpg" alt="妈妈" class="page-image">
             </div>
         </div>
         <!-- 绿色页面 -->
         <div class="page green">
             <div class="content">
                 <div class="text">这是我的爸爸</div>
-                <img src="2.jpg" alt="Green Page" class="page-image">
+                <img src="2.jpg" alt="爸爸" class="page-image">
             </div>
         </div>
         <!-- 黄色页面 -->
         <div class="page yellow">
             <div class="content">
                 <div class="text">我们是幸福的一家</div>
-                <img src="ccc.jpg" alt="Yellow Page" class="page-image">
+                <img src="ccc.jpg" alt="幸福的一家" class="page-image">
             </div>
         </div>
     </div>
 
     <!-- 引入外部的 JavaScript 文件 -->
-    <script src="script.js"></script>
+    <script>
+        var container = document.querySelector(".container");
+        var pages = document.getElementsByClassName("page");
+        var currentPage = 0;
+
+        var isTurning = false; // 防止频繁触发翻页
+
+        // 监听触摸开始、滑动和结束事件
+        window.onload = function () {
+            var body = document.getElementsByTagName("body")[0];
+            body.addEventListener("touchstart", turnBegin, false);
+            body.addEventListener("touchmove", turning, false);
+            body.addEventListener("touchend", turnEnd, false);
+        }
+
+        var startY, endY; // 存储触摸开始和结束的位置
+
+        function turnBegin(event) {
+            var touch = event.touches[0];
+            startY = touch.pageY;
+        }
+
+        function turning(event) {
+            event.preventDefault(); // 防止默认的滚动行为
+            var touch = event.touches[0];
+            endY = touch.pageY;
+        }
+
+        function turnEnd(event) {
+            if (!isTurning) {
+                if (startY - endY > 50) { // 上滑
+                    nextPage();
+                } else if (endY - startY > 50) { // 下滑
+                    previousPage();
+                }
+                isTurning = true;
+                setTimeout(function () {
+                    isTurning = false;
+                }, 600); // 防止频繁触发翻页
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+            } else {
+                currentPage = 0; // 如果是最后一页，则跳回首页
+            }
+            updatePagePosition();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+            } else {
+                currentPage = pages.length - 1; // 如果是第一页，则跳到最后一页
+            }
+            updatePagePosition();
+        }
+
+        function updatePagePosition() {
+            // 更新容器的transform属性，移动到相应的页面
+            container.style.transform = "translateY(-" + currentPage * 100 + "vh)";
+        }
+    </script>
 </body>
 </html>
