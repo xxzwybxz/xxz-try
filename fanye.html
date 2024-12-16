@@ -3,53 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>手机端滑动翻页示例</title>
+    <title>日照金山</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Arial', sans-serif;
         }
 
         .container {
-            width: 100%;
-            max-width: 600px; /* 限制最大宽度，适应手机屏幕 */
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            height: 100vh;
             overflow: hidden; /* 隐藏滚动条 */
             position: relative;
+            background-color: #000;
         }
 
-        .content-wrapper {
-            display: flex;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .content {
+        .page-wrapper {
+            height: 100%;
             width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.5s ease-in-out; /* 平滑滑动效果 */
+        }
+
+        .page {
+            height: 100vh; /* 每一页占据整个屏幕高度 */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 200px;
-            background-color: #f8f8f8;
-            border-radius: 8px;
-            margin-right: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            position: relative;
         }
 
-        h2 {
-            font-size: 1.5em;
+        #page1 {
+            background: url('https://example.com/images/morning.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        #page2 {
+            background: url('https://example.com/images/sunrise.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        #page3 {
+            background: url('https://example.com/images/daytime.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        #page4 {
+            background: url('https://example.com/images/sunset.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        .page h2 {
+            font-size: 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 5px;
         }
 
         .pagination {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
             text-align: center;
-            margin-top: 20px;
         }
 
         .pagination span {
@@ -58,7 +81,6 @@
             background-color: #007bff;
             color: white;
             border-radius: 5px;
-            font-size: 1.1em;
             cursor: pointer;
         }
 
@@ -68,28 +90,27 @@
 
         /* 响应式设计 */
         @media (max-width: 600px) {
-            .pagination span {
-                padding: 8px 12px;
-                font-size: 1em;
+            .page h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 包含所有页面内容的外层div -->
-        <div class="content-wrapper" id="content-wrapper">
-            <div class="content" id="page1">
-                <h2>第1页内容</h2>
-                <p>这是第1页的内容。</p>
+        <!-- 包裹页面的外层div -->
+        <div class="page-wrapper" id="page-wrapper">
+            <div class="page" id="page1">
+                <h2>日照金山 - 清晨的第一缕阳光</h2>
             </div>
-            <div class="content" id="page2">
-                <h2>第2页内容</h2>
-                <p>这是第2页的内容。</p>
+            <div class="page" id="page2">
+                <h2>日照金山 - 日出照耀大地</h2>
             </div>
-            <div class="content" id="page3">
-                <h2>第3页内容</h2>
-                <p>这是第3页的内容。</p>
+            <div class="page" id="page3">
+                <h2>日照金山 - 正午的辉煌</h2>
+            </div>
+            <div class="page" id="page4">
+                <h2>日照金山 - 傍晚的温暖余晖</h2>
             </div>
         </div>
 
@@ -98,20 +119,21 @@
             <span id="page1-btn" class="active" onclick="showPage(0)">1</span>
             <span id="page2-btn" onclick="showPage(1)">2</span>
             <span id="page3-btn" onclick="showPage(2)">3</span>
+            <span id="page4-btn" onclick="showPage(3)">4</span>
         </div>
     </div>
 
     <script>
-        let startX = 0;
         let currentPage = 0;
-        const contentWrapper = document.getElementById('content-wrapper');
-        const pages = document.querySelectorAll('.content');
+        const pageWrapper = document.getElementById('page-wrapper');
+        const pages = document.querySelectorAll('.page');
         const paginationLinks = document.querySelectorAll('.pagination span');
+        let startY = 0;
 
-        // 显示页面
+        // 显示指定页面
         function showPage(pageNumber) {
             currentPage = pageNumber;
-            contentWrapper.style.transform = `translateX(-${pageNumber * 100}%)`;
+            pageWrapper.style.transform = `translateY(-${pageNumber * 100}vh)`; // 竖直滑动
             updatePagination();
         }
 
@@ -127,19 +149,19 @@
         }
 
         // 监听滑动事件
-        contentWrapper.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
+        pageWrapper.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
         });
 
-        contentWrapper.addEventListener('touchend', (e) => {
-            let endX = e.changedTouches[0].clientX;
-            if (startX - endX > 50) {
-                // 向左滑动
+        pageWrapper.addEventListener('touchend', (e) => {
+            const endY = e.changedTouches[0].clientY;
+            if (startY - endY > 50) {
+                // 向上滑动
                 if (currentPage < pages.length - 1) {
                     showPage(currentPage + 1);
                 }
-            } else if (endX - startX > 50) {
-                // 向右滑动
+            } else if (endY - startY > 50) {
+                // 向下滑动
                 if (currentPage > 0) {
                     showPage(currentPage - 1);
                 }
