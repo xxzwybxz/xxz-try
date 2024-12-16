@@ -31,14 +31,14 @@ html, body {
     background-color: red;
 }
 
-/* 黄色页面 */
-.yellow {
-    background-color: yellow;
-}
-
 /* 绿色页面 */
 .green {
     background-color: green;
+}
+
+/* 黄色页面 */
+.yellow {
+    background-color: yellow;
 }
 
 /* 添加文字的样式 */
