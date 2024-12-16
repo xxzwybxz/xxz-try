@@ -1,62 +1,18 @@
-var pages = document.getElementsByClassName("page");
-var curPage = 0;
-var isTurning = false;
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>触摸滑动翻页</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page red"></div>
+        <div class="page yellow"></div>
+        <div class="page green"></div>
+    </div>
 
-window.onload = function() {
-    var body = document.getElementsByTagName("body")[0];
-    body.addEventListener("touchstart", turnBegin, false);
-    body.addEventListener("touchmove", turning, false);
-    body.addEventListener("touchend", turnEnd, false);
-}
-
-var x, y;
-var x2, y2;
-
-function turnBegin(event) {
-    var touch = event.touches[0];
-    x = touch.pageX;
-    y = touch.pageY;
-}
-
-function turning(event) {
-    event.preventDefault();  // 阻止默认滚动行为
-    var touch = event.touches[0];
-    x2 = touch.pageX;
-    y2 = touch.pageY;
-}
-
-function turnEnd(event) {
-    if (!isTurning) {
-        if (y2 - y > 100) {
-            turnUp();
-        } else if (y - y2 > 100) {
-            turnPage();
-        }
-        isTurning = true;
-        setTimeout(function() {
-            isTurning = false;
-        }, 600);  // 设置延时，防止多次触发
-    }
-}
-
-function turnPage() {
-    pages[curPage].className = "page pt-page-moveToTop"; // 把当前页隐藏
-    if (curPage < pages.length - 1) { // 如果不是最后一页
-        pages[curPage + 1].className = "page pt-page-moveFromBottom";
-        curPage++;
-    } else { // 如果是最后一页，则跳回首页
-        pages[0].className = "page pt-page-moveFromBottom";
-        curPage = 0;
-    }
-}
-
-function turnUp() {
-    pages[curPage].className = "page pt-page-moveToBottom"; // 当前页向下移动
-    if (curPage > 0) { // 如果当前不是第一页
-        pages[curPage - 1].className = "page pt-page-moveFromTop";
-        curPage--;
-    } else { // 如果是第一页，则跳到最后一页
-        pages[pages.length - 1].className = "page pt-page-moveFromTop";
-        curPage = pages.length - 1;
-    }
-}
+    <script src="script.js"></script>
+</body>
+</html>
