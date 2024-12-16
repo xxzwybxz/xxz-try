@@ -33,13 +33,12 @@
             align-items: center;
             flex-direction: column;
             position: relative;
-            opacity: 0;
-            animation: fadeIn 1s ease-in-out forwards;
+            opacity: 1;
         }
 
         /* 各页面背景颜色 */
         .red {
-            background-color: #FFCDD2; /* 柔和的粉红色 */
+            background-color: #dd5747; /* 柔和的粉红色 */
         }
 
         .green {
@@ -47,18 +46,13 @@
         }
 
         .yellow {
-            background-color: #FFF9C4; /* 柔和的黄色 */
+            background-color: #ffde59; /* 柔和的黄色 */
         }
 
         /* 动画效果 */
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            0% { transform: translateY(50px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         /* 内容容器 */
@@ -70,6 +64,11 @@
             justify-content: center;
             width: 80%; /* 内容宽度 */
             max-width: 800px; /* 最大宽度 */
+            opacity: 0;
+        }
+
+        .content.active {
+            animation: fadeIn 1s ease-in-out forwards;
         }
 
         /* 标题样式 */
@@ -80,7 +79,6 @@
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             opacity: 0;
-            animation: slideIn 1s ease-in-out 0.5s forwards;
         }
 
         /* 正文样式 */
@@ -91,7 +89,6 @@
             line-height: 1.6;
             padding: 0 10px;
             opacity: 0;
-            animation: slideIn 1s ease-in-out 1.5s forwards;
         }
 
         /* 图片样式 */
@@ -102,7 +99,6 @@
             border-radius: 10px; /* 添加圆角 */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
             opacity: 0;
-            animation: slideIn 1s ease-in-out 2.5s forwards;
         }
     </style>
 </head>
@@ -136,7 +132,7 @@
 
     <script>
         var container = document.querySelector(".container");
-        var pages = document.getElementsByClassName("page");
+        var pages = document.querySelectorAll(".page");
         var currentPage = 0;
 
         var isTurning = false; // 防止频繁触发翻页
@@ -147,6 +143,9 @@
             body.addEventListener("touchstart", turnBegin, false);
             body.addEventListener("touchmove", turning, false);
             body.addEventListener("touchend", turnEnd, false);
+
+            // 初始化第一页动画
+            showPageContent(currentPage);
         }
 
         var startY, endY; // 存储触摸开始和结束的位置
@@ -197,6 +196,20 @@
         function updatePagePosition() {
             // 更新容器的transform属性，移动到相应的页面
             container.style.transform = "translateY(-" + currentPage * 100 + "vh)";
+            showPageContent(currentPage);
+        }
+
+        function showPageContent(pageIndex) {
+            // 重置所有页面内容的动画
+            pages.forEach((page, index) => {
+                const content = page.querySelector(".content");
+                content.classList.remove("active");
+                content.style.opacity = "0";
+            });
+
+            // 显示当前页面内容
+            const currentContent = pages[pageIndex].querySelector(".content");
+            setTimeout(() => currentContent.classList.add("active"), 500);
         }
     </script>
 </body>
