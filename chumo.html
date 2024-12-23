@@ -18,6 +18,14 @@
             border-radius: 4px;
             pointer-events: none;
         }
+        .map path {
+            stroke: #fff;
+            stroke-width: 0.5;
+        }
+        .map path:hover {
+            stroke: orange;
+            stroke-width: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -58,14 +66,14 @@
             "Hainan": 10.1
         };
 
-        // SVG 容器
+        // 设置SVG容器
         const svg = d3.select("svg");
         const width = +svg.attr("width");
         const height = +svg.attr("height");
 
         // 地图投影
         const projection = d3.geoMercator()
-            .center([104, 35]) // 中心点
+            .center([104, 35]) // 地图中心
             .scale(700) // 缩放比例
             .translate([width / 2, height / 2]);
 
@@ -81,9 +89,11 @@
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        // 加载 GeoJSON 数据
-        d3.json("china.json").then(geoData => {
-            svg.selectAll("path")
+        // 加载中国 GeoJSON 数据
+        d3.json("https://raw.githubusercontent.com/echarts-maps/echarts-china-cities-js/master/json/china.json").then(geoData => {
+            svg.append("g")
+                .attr("class", "map")
+                .selectAll("path")
                 .data(geoData.features)
                 .enter().append("path")
                 .attr("d", path)
@@ -92,19 +102,17 @@
                     const population = populationData[province] || 0;
                     return colorScale(population);
                 })
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 0.5)
                 .on("mouseover", function(event, d) {
                     const province = d.properties.name;
                     const population = populationData[province] || "Unknown";
-                    d3.select(this).attr("stroke-width", 1.5).attr("stroke", "orange");
+                    d3.select(this).attr("stroke", "orange").attr("stroke-width", 1.5);
                     tooltip.transition().duration(200).style("opacity", 0.9);
                     tooltip.html(`<strong>${province}</strong><br>Population: ${population} million`)
                         .style("left", (event.pageX + 10) + "px")
                         .style("top", (event.pageY - 28) + "px");
                 })
                 .on("mouseout", function() {
-                    d3.select(this).attr("stroke-width", 0.5).attr("stroke", "#fff");
+                    d3.select(this).attr("stroke", "#fff").attr("stroke-width", 0.5);
                     tooltip.transition().duration(200).style("opacity", 0);
                 });
         }).catch(error => console.error("Error loading GeoJSON data:", error));
