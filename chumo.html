@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>触摸事件背景颜色变化</title>
+    <title>触摸方向判断</title>
     <style>
         /* 基本样式 */
         * {
@@ -36,40 +36,64 @@
         h1 {
             margin-bottom: 1rem;
         }
+
+        #direction {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="container" id="event-container">
-        <h1>触摸事件背景颜色变化</h1>
-        <p>按住屏幕并移动手指来改变背景颜色。</p>
+        <h1>触摸方向判断</h1>
+        <p>按住屏幕并移动手指来判断方向。</p>
+        <p id="direction">方向: 无</p>
     </div>
 
     <script>
-        // 获取容器元素
+        // 获取容器元素和方向显示元素
         const container = document.getElementById('event-container');
+        const directionElement = document.getElementById('direction');
+
+        let startY;
 
         // 触摸开始事件
         container.addEventListener('touchstart', function(event) {
             event.preventDefault(); // 阻止默认行为
-            container.style.backgroundColor = 'red';
+            const touch = event.touches[0];
+            startY = touch.clientY;
+            directionElement.textContent = '方向: 无';
         });
 
         // 触摸移动事件
         container.addEventListener('touchmove', function(event) {
             event.preventDefault(); // 阻止默认行为
-            container.style.backgroundColor = 'green';
+            const touch = event.touches[0];
+            const currentY = touch.clientY;
+
+            // 计算触摸点的移动方向
+            if (currentY < startY) {
+                directionElement.textContent = '方向: 往上翻';
+            } else if (currentY > startY) {
+                directionElement.textContent = '方向: 往下翻';
+            } else {
+                directionElement.textContent = '方向: 无';
+            }
+
+            // 更新起始位置
+            startY = currentY;
         });
 
         // 触摸结束事件
         container.addEventListener('touchend', function(event) {
             event.preventDefault(); // 阻止默认行为
-            container.style.backgroundColor = 'blue';
+            directionElement.textContent = '方向: 无';
         });
 
-        // 触摸取消事件（例如，用户的手指离开屏幕）
+        // 触摸取消事件
         container.addEventListener('touchcancel', function(event) {
             event.preventDefault(); // 阻止默认行为
-            container.style.backgroundColor = 'blue';
+            directionElement.textContent = '方向: 无';
         });
     </script>
 </body>
