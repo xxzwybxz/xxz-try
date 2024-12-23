@@ -2,98 +2,87 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>触摸方向判断</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>全屏翻页</title>
     <style>
-        /* 基本样式 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        .container {
-            padding: 2rem;
-            background-color: #fff;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        body, html {
             width: 100%;
-            max-width: 400px;
+            height: 100%;
+            overflow: hidden;
         }
 
-        h1 {
-            margin-bottom: 1rem;
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
         }
 
-        #direction {
-            font-size: 1.5rem;
-            margin-top: 1rem;
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        #redPage {
+            display: block; /* 初始显示红色页面 */
         }
     </style>
 </head>
 <body>
-    <div class="container" id="event-container">
-        <h1>触摸方向判断</h1>
-        <p>按住屏幕并移动手指来判断方向。</p>
-        <p id="direction">方向: 无</p>
-    </div>
+    <div class="page red" id="redPage"></div>
+    <div class="page green" id="greenPage"></div>
+    <div class="page blue" id="bluePage"></div>
 
     <script>
-        // 获取容器元素和方向显示元素
-        const container = document.getElementById('event-container');
-        const directionElement = document.getElementById('direction');
+        let currentPage = 0; // 当前显示的页面索引
+        const pages = document.querySelectorAll('.page');
+        const totalPages = pages.length;
 
-        let startY;
-
-        // 触摸开始事件
-        container.addEventListener('touchstart', function(event) {
-            event.preventDefault(); // 阻止默认行为
-            const touch = event.touches[0];
-            startY = touch.clientY;
-            directionElement.textContent = '方向: 无';
-        });
-
-        // 触摸移动事件
-        container.addEventListener('touchmove', function(event) {
-            event.preventDefault(); // 阻止默认行为
-            const touch = event.touches[0];
-            const currentY = touch.clientY;
-
-            // 计算触摸点的移动方向
-            if (currentY < startY) {
-                directionElement.textContent = '方向: 往上翻';
-            } else if (currentY > startY) {
-                directionElement.textContent = '方向: 往下翻';
-            } else {
-                directionElement.textContent = '方向: 无';
+        function showPage(index) {
+            for (let i = 0; i < totalPages; i++) {
+                pages[i].style.display = 'none';
             }
+            if (index >= 0 && index < totalPages) {
+                pages[index].style.display = 'block';
+            }
+        }
 
-            // 更新起始位置
-            startY = currentY;
+        let startY, endY;
+
+        document.addEventListener('touchstart', function(event) {
+            startY = event.touches[0].clientY;
         });
 
-        // 触摸结束事件
-        container.addEventListener('touchend', function(event) {
-            event.preventDefault(); // 阻止默认行为
-            directionElement.textContent = '方向: 无';
-        });
+        document.addEventListener('touchend', function(event) {
+            endY = event.changedTouches[0].clientY;
 
-        // 触摸取消事件
-        container.addEventListener('touchcancel', function(event) {
-            event.preventDefault(); // 阻止默认行为
-            directionElement.textContent = '方向: 无';
+            const deltaY = startY - endY; // 注意这里是 startY - endY
+
+            if (Math.abs(deltaY) > 30) {
+                if (deltaY > 0) {
+                    // 向上滑动，显示下一个页面
+                    currentPage = (currentPage + 1) % totalPages;
+                } else {
+                    // 向下滑动，显示上一个页面
+                    currentPage = (currentPage - 1 + totalPages) % totalPages;
+                }
+                showPage(currentPage);
+            }
         });
     </script>
 </body>
