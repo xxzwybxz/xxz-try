@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>触摸事件背景颜色变化</title>
+    <style>
+        /* 基本样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="event-container">
+        <h1>触摸事件背景颜色变化</h1>
+        <p>按住屏幕并移动手指来改变背景颜色。</p>
+    </div>
+
+    <script>
+        // 获取容器元素
+        const container = document.getElementById('event-container');
+
+        // 触摸开始事件
+        container.addEventListener('touchstart', function(event) {
+            event.preventDefault(); // 阻止默认行为
+            container.style.backgroundColor = 'red';
+        });
+
+        // 触摸移动事件
+        container.addEventListener('touchmove', function(event) {
+            event.preventDefault(); // 阻止默认行为
+            container.style.backgroundColor = 'green';
+        });
+
+        // 触摸结束事件
+        container.addEventListener('touchend', function(event) {
+            event.preventDefault(); // 阻止默认行为
+            container.style.backgroundColor = 'blue';
+        });
+
+        // 触摸取消事件（例如，用户的手指离开屏幕）
+        container.addEventListener('touchcancel', function(event) {
+            event.preventDefault(); // 阻止默认行为
+            container.style.backgroundColor = 'blue';
+        });
+    </script>
+</body>
+</html>
