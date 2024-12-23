@@ -1,47 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSS Animation Example</title>
-  <style>
-    /* 全局样式 */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-    }
-
-    /* 定义动画关键帧 */
-    @keyframes moveAndChangeColor {
-      0% {
-        transform: translateX(0);
-        background-color: blue;
-      }
-      50% {
-        transform: translateX(200px);
-        background-color: green;
-      }
-      100% {
-        transform: translateX(0);
-        background-color: blue;
-      }
-    }
-
-    /* 方块样式 */
-    .box {
-      width: 50px;
-      height: 50px;
-      animation: moveAndChangeColor 3s ease-in-out infinite;
-    }
-  </style>
+    <title>Simple Bar Chart with D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .bar {
+            fill: steelblue;
+        }
+        .bar:hover {
+            fill: orange;
+        }
+        .axis {
+            font: 10px sans-serif;
+        }
+        .axis path, .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="box"></div>
+    <script>
+        // 数据
+        const data = [4, 8, 15, 16, 23, 42];
+
+        // 设置图表尺寸
+        const width = 420;
+        const height = 300;
+        const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.top - margin.bottom;
+
+        // 创建SVG容器
+        const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // 创建坐标轴
+        const xScale = d3.scaleBand()
+            .domain(d3.range(data.length))
+            .range([0, innerWidth])
+            .padding(0.1);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data)])
+            .nice()
+            .range([innerHeight, 0]);
+
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        // 添加X轴
+        g.append("g")
+            .attr("transform", `translate(0, ${innerHeight})`)
+            .call(d3.axisBottom(xScale));
+
+        // 添加Y轴
+        g.append("g")
+            .call(d3.axisLeft(yScale));
+
+        // 添加条形
+        const bars = g.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", (d, i) => xScale(i))
+            .attr("y", d => yScale(d))
+            .attr("width", xScale.bandwidth())
+            .attr("height", d => innerHeight - yScale(d));
+
+        // 添加工具提示
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // 鼠标移动事件
+        bars.on("mouseover", function(event, d) {
+            d3.select(this).attr("fill", "orange");
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(`Value: ${d}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function() {
+            d3.select(this).attr("fill", "steelblue");
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0);
+        });
+
+        // 鼠标移动时更新工具提示位置
+        svg.on("mousemove", function(event) {
+            tooltip.style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        });
+    </script>
 </body>
 </html>
