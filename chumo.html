@@ -1,117 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Animation Example</title>
   <style>
-    body, html {
+    /* 全局样式 */
+    body {
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-    }
-
-    #container {
       display: flex;
-      height: 95vh; /* 占据 95% 的视口高度 */
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
     }
 
-    #left {
-      flex: 1; /* 左侧部分占据剩余空间 */
-      border-right: 1px solid black;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #right {
-      flex: 1; /* 右侧部分占据剩余空间 */
-      padding: 10px;
-      overflow: auto;
-    }
-
-    .editor-container {
-      flex: 1; /* 让每个编辑器容器占据相等的高度 */
-      margin: 5px;
-    }
-
-    .CodeMirror {
-      height: 100%; /* 编辑器高度占满容器 */
-      font-size: 20px; /* 设置字体大小 */
-    }
-    .cm-s-monokai.CodeMirror{
-        height: 95%;
-    }
-    #resultDiv {
-      border: 1px solid black;
-      padding: 5px;
-      margin: 5px;
-      overflow: auto;
-    }
-  </style>
-  <!-- 引入 CodeMirror -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
-</head>
-
-<body>
-  <div id="container">
-    <div id="left">
-      <div class="editor-container">
-        <label for="htmlTextarea">HTML:</label>
-        <textarea id="htmlTextarea" placeholder="Enter HTML here"></textarea>
-      </div>
-      <div class="editor-container">
-        <label for="cssTextarea">CSS:</label>
-        <textarea id="cssTextarea" placeholder="Enter CSS here"></textarea>
-      </div>
-    </div>
-    <div id="right">
-      <div id="resultDiv"></div>
-    </div>
-  </div>
-  <script>
-    // 初始化 CodeMirror 编辑器
-    const htmlEditor = CodeMirror.fromTextArea(document.getElementById('htmlTextarea'), {
-      mode: "text/html",
-      lineNumbers: true,
-      theme: "monokai"
-    });
-
-    const cssEditor = CodeMirror.fromTextArea(document.getElementById('cssTextarea'), {
-      mode: "text/css",
-      lineNumbers: true,
-      theme: "monokai"
-    });
-
-    function updateResult() {
-      const htmlContent = htmlEditor.getValue();
-      const cssContent = cssEditor.getValue();
-      try {
-        const styleContent = `<style>${cssContent}</style>`;
-        document.getElementById('resultDiv').innerHTML = `${styleContent}${htmlContent}`;
-      } catch (error) {
-        document.getElementById('resultDiv').innerHTML = `<p>Error: ${error.message}</p>`;
+    /* 定义动画关键帧 */
+    @keyframes moveAndChangeColor {
+      0% {
+        transform: translateX(0);
+        background-color: blue;
+      }
+      50% {
+        transform: translateX(200px);
+        background-color: green;
+      }
+      100% {
+        transform: translateX(0);
+        background-color: blue;
       }
     }
 
-    // 监听编辑器内容变化
-    htmlEditor.on("change", updateResult);
-    cssEditor.on("change", updateResult);
-
-    // 初始更新结果
-    updateResult();
-
-    // 使编辑器高度可调整
-    window.addEventListener('resize', () => {
-      htmlEditor.setSize(null, null); // 自动调整高度
-      cssEditor.setSize(null, null); // 自动调整高度
-    });
-  </script>
+    /* 方块样式 */
+    .box {
+      width: 50px;
+      height: 50px;
+      animation: moveAndChangeColor 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
 </body>
-
 </html>
