@@ -1,33 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Charts with D3.js</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>China Population Heatmap</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        .axis {
-            font: 10px sans-serif;
-        }
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
-        .dot {
-            stroke: #fff;
-            fill: steelblue;
-            opacity: 0.8;
-        }
-        .dot:hover {
-            fill: orange;
-            stroke: #fff;
-        }
-        .bar {
-            fill: steelblue;
-        }
-        .bar:hover {
-            fill: orange;
-        }
         .tooltip {
             position: absolute;
             text-align: center;
@@ -37,122 +15,101 @@
             border-radius: 4px;
             pointer-events: none;
         }
+        .map {
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
-    <h1>Charts with D3.js</h1>
-
-    <h2>Scatter Plot</h2>
-    <svg id="scatter-plot" width="500" height="500"></svg>
-
-    <h2>Bar Chart</h2>
-    <svg id="bar-chart" width="500" height="300"></svg>
-
-    <h2>Pie Chart</h2>
-    <svg id="pie-chart" width="400" height="400"></svg>
+    <h1>China Population Heatmap</h1>
+    <svg id="map" class="map" width="800" height="600"></svg>
 
     <script>
-        // 数据
-        const scatterData = [
-            { name: "Alice", math: 85, english: 90 },
-            { name: "Bob", math: 78, english: 82 },
-            { name: "Charlie", math: 92, english: 88 },
-            { name: "David", math: 65, english: 70 },
-            { name: "Eva", math: 88, english: 95 }
-        ];
+        // 地图 SVG 容器
+        const svg = d3.select("#map");
+        const width = 800;
+        const height = 600;
 
-        const barData = [
-            { subject: "Math", score: 85 },
-            { subject: "English", score: 90 },
-            { subject: "Science", score: 75 },
-            { subject: "History", score: 80 },
-            { subject: "Art", score: 95 }
-        ];
+        // 地图投影
+        const projection = d3.geoMercator()
+            .center([107, 31]) // 中国地图的中心点
+            .scale(700)
+            .translate([width / 2, height / 2]);
 
-        const pieData = [
-            { label: "Math", value: 85 },
-            { label: "English", value: 90 },
-            { label: "Science", value: 75 },
-            { label: "History", value: 80 },
-            { label: "Art", value: 95 }
-        ];
+        const path = d3.geoPath().projection(projection);
 
-        // 散点图
-        const scatterSvg = d3.select("#scatter-plot");
-        const scatterMargin = { top: 20, right: 20, bottom: 30, left: 40 };
-        const scatterWidth = 500 - scatterMargin.left - scatterMargin.right;
-        const scatterHeight = 500 - scatterMargin.top - scatterMargin.bottom;
+        // 人口数据（示例数据）
+        const populationData = {
+            "Beijing": 2154,
+            "Tianjin": 1560,
+            "Hebei": 7556,
+            "Shanxi": 3718,
+            "Inner Mongolia": 2520,
+            "Liaoning": 4359,
+            "Jilin": 2704,
+            "Heilongjiang": 3185,
+            "Shanghai": 2487,
+            "Jiangsu": 8475,
+            "Zhejiang": 6457,
+            "Anhui": 6102,
+            "Fujian": 4154,
+            "Jiangxi": 4648,
+            "Shandong": 10047,
+            "Henan": 9605,
+            "Hubei": 5917,
+            "Hunan": 6644,
+            "Guangdong": 12601,
+            "Guangxi": 5079,
+            "Hainan": 1027,
+            "Chongqing": 3205,
+            "Sichuan": 8367,
+            "Guizhou": 3856,
+            "Yunnan": 4830,
+            "Tibet": 365,
+            "Shaanxi": 3864,
+            "Gansu": 2637,
+            "Qinghai": 603,
+            "Ningxia": 720,
+            "Xinjiang": 2487
+        };
 
-        const scatterGroup = scatterSvg.append("g")
-            .attr("transform", `translate(${scatterMargin.left}, ${scatterMargin.top})`);
+        // 颜色比例尺
+        const colorScale = d3.scaleSequential(d3.interpolateReds)
+            .domain([0, d3.max(Object.values(populationData))]);
 
-        const xScaleScatter = d3.scaleLinear().domain([60, 100]).range([0, scatterWidth]);
-        const yScaleScatter = d3.scaleLinear().domain([60, 100]).range([scatterHeight, 0]);
+        // 工具提示
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
-        scatterGroup.append("g")
-            .attr("transform", `translate(0, ${scatterHeight})`)
-            .call(d3.axisBottom(xScaleScatter));
-
-        scatterGroup.append("g").call(d3.axisLeft(yScaleScatter));
-
-        scatterGroup.selectAll(".dot")
-            .data(scatterData)
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("cx", d => xScaleScatter(d.math))
-            .attr("cy", d => yScaleScatter(d.english))
-            .attr("r", 5);
-
-        // 柱状图
-        const barSvg = d3.select("#bar-chart");
-        const barMargin = { top: 20, right: 20, bottom: 30, left: 40 };
-        const barWidth = 500 - barMargin.left - barMargin.right;
-        const barHeight = 300 - barMargin.top - barMargin.bottom;
-
-        const barGroup = barSvg.append("g")
-            .attr("transform", `translate(${barMargin.left}, ${barMargin.top})`);
-
-        const xScaleBar = d3.scaleBand()
-            .domain(barData.map(d => d.subject))
-            .range([0, barWidth])
-            .padding(0.1);
-
-        const yScaleBar = d3.scaleLinear()
-            .domain([0, 100])
-            .range([barHeight, 0]);
-
-        barGroup.append("g")
-            .attr("transform", `translate(0, ${barHeight})`)
-            .call(d3.axisBottom(xScaleBar));
-
-        barGroup.append("g").call(d3.axisLeft(yScaleBar));
-
-        barGroup.selectAll(".bar")
-            .data(barData)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .attr("x", d => xScaleBar(d.subject))
-            .attr("y", d => yScaleBar(d.score))
-            .attr("width", xScaleBar.bandwidth())
-            .attr("height", d => barHeight - yScaleBar(d.score));
-
-        // 饼状图
-        const pieSvg = d3.select("#pie-chart")
-            .attr("width", 400)
-            .attr("height", 400)
-            .append("g")
-            .attr("transform", "translate(200,200)");
-
-        const pie = d3.pie().value(d => d.value);
-        const arc = d3.arc().innerRadius(0).outerRadius(150);
-
-        const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-        const pieGroup = pieSvg.selectAll("path")
-            .data(pie(pieData))
-            .enter().append("path")
-            .attr("d", arc)
-            .attr("fill", d => color(d.data.label));
+        // 加载 GeoJSON 数据
+        d3.json("https://raw.githubusercontent.com/echarts-maps/echarts-china-cities-js/master/json/china.json")
+            .then(geoData => {
+                svg.selectAll("path")
+                    .data(geoData.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("fill", d => {
+                        const name = d.properties.name;
+                        const population = populationData[name];
+                        return population ? colorScale(population) : "#ccc";
+                    })
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 0.5)
+                    .on("mouseover", function(event, d) {
+                        const name = d.properties.name;
+                        const population = populationData[name] || "No data";
+                        tooltip.transition().duration(200).style("opacity", 0.9);
+                        tooltip.html(`${name}<br>Population: ${population}万`)
+                            .style("left", (event.pageX + 10) + "px")
+                            .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", () => {
+                        tooltip.transition().duration(200).style("opacity", 0);
+                    });
+            })
+            .catch(error => console.error("Error loading GeoJSON:", error));
     </script>
 </body>
 </html>
