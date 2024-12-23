@@ -1,89 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>全屏翻页</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+    #container {
+      display: flex;
+      height: 95vh; /* 占据 95% 的视口高度 */
+    }
 
-        .page {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-        }
+    #left {
+      flex: 1; /* 左侧部分占据剩余空间 */
+      border-right: 1px solid black;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .red {
-            background-color: red;
-        }
+    #right {
+      flex: 1; /* 右侧部分占据剩余空间 */
+      padding: 10px;
+      overflow: auto;
+    }
 
-        .green {
-            background-color: green;
-        }
+    .editor-container {
+      flex: 1; /* 让每个编辑器容器占据相等的高度 */
+      margin: 5px;
+    }
 
-        .blue {
-            background-color: blue;
-        }
-
-        #redPage {
-            display: block; /* 初始显示红色页面 */
-        }
-    </style>
+    .CodeMirror {
+      height: 100%; /* 编辑器高度占满容器 */
+      font-size: 20px; /* 设置字体大小 */
+    }
+    .cm-s-monokai.CodeMirror{
+        height: 95%;
+    }
+    #resultDiv {
+      border: 1px solid black;
+      padding: 5px;
+      margin: 5px;
+      overflow: auto;
+    }
+  </style>
+  <!-- 引入 CodeMirror -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
 </head>
+
 <body>
-    <div class="page red" id="redPage"></div>
-    <div class="page green" id="greenPage"></div>
-    <div class="page blue" id="bluePage"></div>
+  <div id="container">
+    <div id="left">
+      <div class="editor-container">
+        <label for="htmlTextarea">HTML:</label>
+        <textarea id="htmlTextarea" placeholder="Enter HTML here"></textarea>
+      </div>
+      <div class="editor-container">
+        <label for="cssTextarea">CSS:</label>
+        <textarea id="cssTextarea" placeholder="Enter CSS here"></textarea>
+      </div>
+    </div>
+    <div id="right">
+      <div id="resultDiv"></div>
+    </div>
+  </div>
+  <script>
+    // 初始化 CodeMirror 编辑器
+    const htmlEditor = CodeMirror.fromTextArea(document.getElementById('htmlTextarea'), {
+      mode: "text/html",
+      lineNumbers: true,
+      theme: "monokai"
+    });
 
-    <script>
-        let currentPage = 0; // 当前显示的页面索引
-        const pages = document.querySelectorAll('.page');
-        const totalPages = pages.length;
+    const cssEditor = CodeMirror.fromTextArea(document.getElementById('cssTextarea'), {
+      mode: "text/css",
+      lineNumbers: true,
+      theme: "monokai"
+    });
 
-        function showPage(index) {
-            for (let i = 0; i < totalPages; i++) {
-                pages[i].style.display = 'none';
-            }
-            if (index >= 0 && index < totalPages) {
-                pages[index].style.display = 'block';
-            }
-        }
+    function updateResult() {
+      const htmlContent = htmlEditor.getValue();
+      const cssContent = cssEditor.getValue();
+      try {
+        const styleContent = `<style>${cssContent}</style>`;
+        document.getElementById('resultDiv').innerHTML = `${styleContent}${htmlContent}`;
+      } catch (error) {
+        document.getElementById('resultDiv').innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
 
-        let startY, endY;
+    // 监听编辑器内容变化
+    htmlEditor.on("change", updateResult);
+    cssEditor.on("change", updateResult);
 
-        document.addEventListener('touchstart', function(event) {
-            startY = event.touches[0].clientY;
-        });
+    // 初始更新结果
+    updateResult();
 
-        document.addEventListener('touchend', function(event) {
-            endY = event.changedTouches[0].clientY;
-
-            const deltaY = startY - endY; // 注意这里是 startY - endY
-
-            if (Math.abs(deltaY) > 30) {
-                if (deltaY > 0) {
-                    // 向上滑动，显示下一个页面
-                    currentPage = (currentPage + 1) % totalPages;
-                } else {
-                    // 向下滑动，显示上一个页面
-                    currentPage = (currentPage - 1 + totalPages) % totalPages;
-                }
-                showPage(currentPage);
-            }
-        });
-    </script>
+    // 使编辑器高度可调整
+    window.addEventListener('resize', () => {
+      htmlEditor.setSize(null, null); // 自动调整高度
+      cssEditor.setSize(null, null); // 自动调整高度
+    });
+  </script>
 </body>
+
 </html>
