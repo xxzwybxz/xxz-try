@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>《Kill Me Heal Me》数据分析</title>
+    <title>《Kill Me Heal Me》豆瓣剧评爬取结果展示</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,6 +51,19 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .video-container iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -71,20 +84,44 @@
                 <img src="poster3.jpg" alt="海报">
             </div>
         </section>
+
+        <section class="section">
+            <h2>剧情解说</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/example" allowfullscreen></iframe>
+            </div>
+        </section>
         
         <section class="section">
             <h2>数据分析结果</h2>
             <p>通过词频统计与情感分析，我们发现观众对七重人格的设定充满兴趣，并且对剧情的深刻主题和演员的精湛演技给予了高度评价。</p>
             <div class="charts">
-                <img src="词云图（蓝色）.png" alt="词云图">
+                <img src="词云图.jpg" alt="词云图">
                 <img src="Historic_柱状图.png" alt="高频词图">
                 <img src="情感分析饼状图.png" alt="情感分析饼状图">
             </div>
         </section>
-        
+
         <section class="section">
+            <h2>吸引力分析</h2>
+            <ul>
+                <li>独特的七重人格设定吸引了观众的极大兴趣。</li>
+                <li>深刻的情感描写和剧情救赎主题引发观众共鸣。</li>
+                <li>演员的精湛演技为剧集增添了更多魅力。</li>
+                <li>剧情的复杂性和多样性使观众持续关注。</li>
+            </ul>
+        </section>
+
+       <section class="section">
             <h2>综合结论</h2>
-            <p>《Kill Me Heal Me》通过其独特的剧情设定、深刻的情感描写以及演员的精彩表现，赢得了观众的喜爱，成为了一部经典之作。无论是剧中角色的成长还是剧情中的情感救赎，都让观众深受感动。</p>
+            <p>《Kill Me Heal Me》之所以能成为韩剧中的经典之作，不仅在于其独特的剧情设定和深刻的情感主题，更在于它成功引发了观众的共鸣与思考。通过数据分析，我们看到观众对这部剧的热爱与认可。它不仅是一部娱乐作品，更是一场关于人性、情感与治愈的心灵旅程。</p>
+        </section>
+      
+       <section class="section">
+            <h2>制作过程视频展示</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/example" allowfullscreen></iframe>
+            </div>
         </section>
     </main>
 </body>
