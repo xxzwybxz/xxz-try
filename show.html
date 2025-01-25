@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《Kill Me Heal Me》数据分析</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaf4fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #005f99;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #005f99;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .images {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .images img {
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .charts img {
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>《Kill Me Heal Me》数据分析</h1>
+    </header>
+    <main>
+        <section class="section">
+            <h2>剧集简介</h2>
+            <p>《Kill Me Heal Me》以男主角的七重人格为核心，通过深刻的情感描写和引人入胜的剧情，成为了一部备受观众喜爱的经典韩剧。本次分析基于豆瓣平台爬取的400条剧评，揭示了观众对这部剧的看法及其吸引力所在。</p>
+        </section>
+        
+        <section class="section">
+            <h2>剧照与海报</h2>
+            <div class="images">
+                <img src="poster1.jpg" alt="剧照 1">
+                <img src="poster2.jpg" alt="剧照 2">
+                <img src="poster3.jpg" alt="海报">
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>数据分析结果</h2>
+            <p>通过词频统计与情感分析，我们发现观众对七重人格的设定充满兴趣，并且对剧情的深刻主题和演员的精湛演技给予了高度评价。</p>
+            <div class="charts">
+                <img src="wordcloud.png" alt="词云图">
+                <img src="frequency_chart.png" alt="高频词图">
+                <img src="sentiment_pie.png" alt="情感分析饼状图">
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>综合结论</h2>
+            <p>《Kill Me Heal Me》通过其独特的剧情设定、深刻的情感描写以及演员的精彩表现，赢得了观众的喜爱，成为了一部经典之作。无论是剧中角色的成长还是剧情中的情感救赎，都让观众深受感动。</p>
+        </section>
+    </main>
+</body>
+</html>
